@@ -29,6 +29,7 @@ def clear_exif(file_path):
         et.execute(
             b'-EXIF:all=',
             f'-XMP:Creator={creator_name}'.encode('utf-8'),
+            b'-overwrite_original',
             file_path.encode('utf-8')
         )
 
