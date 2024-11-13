@@ -1,0 +1,62 @@
+import os
+from ftplib import FTP
+import json
+from tqdm import tqdm
+
+from db_handler import log_file_sent
+
+
+def upload_file_ftp(file_path, ftp_details):
+    ftp = FTP(ftp_details['host'])
+    ftp.login(ftp_details['user'], ftp_details['password'])
+
+    # Перейти в указанную удалённую папку
+    remote_dir = ftp_details['remote_directory']
+
+    # Проверка, существует ли удалённая папка
+    try:
+        ftp.cwd(remote_dir)  # Попытка перейти в директорию
+    except Exception as e:
+        print(f"Ошибка: {e}")
+        print(f"Папка {remote_dir} не найдена.")
+        # Если папка не существует, создаём её
+        ftp.mkd(remote_dir)
+        ftp.cwd(remote_dir)
+
+    # Получаем размер файла для отслеживания прогресса
+    file_size = os.path.getsize(file_path)
+
+    # Загружаем файл
+    with open(file_path, 'rb') as f:
+        # Функция для отслеживания прогресса
+        def upload_progress(chunk):
+            progress_bar.update(len(chunk))  # Обновляем прогресс-бар на каждый чанк
+
+            # Создание прогресс-бара с использованием tqdm
+
+        with tqdm(total=file_size, unit='B', unit_scale=True,
+                  desc=f"Загрузка {os.path.basename(file_path)}") as progress_bar:
+            # Загружаем файл с прогрессом
+            ftp.storbinary(f'STOR {os.path.basename(file_path)}', f, 1024, callback=upload_progress)
+
+    ftp.quit()
+    # log_file_sent(os.path.basename(file_path), ftp_details['host'])
+    print(f"Файл {file_path} успешно загружен на сервер {ftp_details['host']}.")
+
+
+def upload_file_to_multiple_ftps(file_path, ftp_details_list):
+    for ftp_details in ftp_details_list:
+
+        print(f"Загружаем файл на FTP сервер: {ftp_details['host']}")
+        upload_file_ftp(file_path, ftp_details)
+        log_file_sent(os.path.basename(file_path), ftp_details['host'])
+
+
+if __name__ == '__main__':
+    # Загрузка конфигурации из файла
+    with open('config.json', 'r') as config_file:
+        config = json.load(config_file)
+
+    _ftp_details = config['ftp_details']
+
+    upload_file_ftp('./test_image/20241112PB125', _ftp_details)
