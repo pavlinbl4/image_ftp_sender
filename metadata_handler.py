@@ -24,9 +24,17 @@ def get_image_metadata(file_path,
 
 def clear_exif(file_path):
     with exiftool.ExifTool() as et:
-        et.execute(b'-all=', b'-XMP:Creator=Photographer_name', file_path.encode())
+        # Удаляем только EXIF данные и обновляем XMP:Creator
+        creator_name = "Семен Лиходеев"
+        et.execute(
+            b'-EXIF:all=',
+            f'-XMP:Creator={creator_name}'.encode('utf-8'),
+            file_path.encode('utf-8')
+        )
 
 
 if __name__ == '__main__':
-    print(get_image_metadata('./test_image/20241112PB125826.jpg',
+    file_path = './test_image/20241109PEV_8316.JPG'
+    clear_exif(file_path)
+    print(get_image_metadata(file_path,
                              tags=['XMP:Description', 'XMP:Label', 'XMP:Creator']))
