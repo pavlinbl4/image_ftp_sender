@@ -1,9 +1,10 @@
-import os
 import json
-from metadata_handler import get_image_metadata, clear_exif
-from ftp_uploader import upload_file_ftp, upload_file_to_multiple_ftps
+import os
 
-from db_handler import initialize_database, log_file_sent, is_file_sent
+from db_handler import initialize_database, is_file_sent
+from ftp_uploader import upload_file_to_multiple_ftps
+from metadata_handler import get_image_metadata, clear_exif
+
 
 def main():
     initialize_database()  # Убедиться, что база данных существует
@@ -22,11 +23,8 @@ def main():
 
         if metadata.get('XMP:Label') == 'Green' and metadata.get('XMP:Description'):
             if not is_file_sent(file_name):
-                # clear_exif(file_path)
+                clear_exif(file_path)
                 upload_file_to_multiple_ftps(file_path, ftp_details)
-
-
-                print(file_name)
 
 
 if __name__ == "__main__":
