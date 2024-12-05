@@ -18,11 +18,13 @@ def main():
         config = json.load(f)
 
     image_dir = config["image_directory"]
+    logger.info(f'{image_dir = }')
     ftp_details = config['ftp_details']
 
     for file_name in os.listdir(image_dir):
-        logger.info(file_name)
-        if file_name.lower().endswith('jpg'):
+
+        if file_name.lower().endswith(('jpg', 'jpeg')):
+            logger.info(file_name)
             file_path = os.path.join(image_dir, file_name)
             metadata = get_image_metadata(file_path,
                                           tags=['XMP:Description', 'XMP:Label'])
