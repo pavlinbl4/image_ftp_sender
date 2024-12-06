@@ -1,13 +1,17 @@
 import json
 import os
 
+from colorama import init, Fore
+from loguru import logger
+
 from db_handler import initialize_database, is_file_sent
 from ftp_uploader import upload_file_to_multiple_ftps
-from metadata_handler import get_image_metadata, clear_exif
-from loguru import logger
+from metadata_handler import get_image_metadata, clear_exif, metadate_update
 
 # Удаляем стандартный обработчик
 logger.remove()
+
+init(autoreset=True)  # Автоматически сбрасывает стиль после каждого print
 
 
 def main():
@@ -33,6 +37,10 @@ def main():
                 if not is_file_sent(file_name):
                     clear_exif(file_path)
                     upload_file_to_multiple_ftps(file_path, ftp_details)
+            elif not metadata.get('XMP:Description'):
+                metadate_update(file_path)
+                print(Fore.RED + f"File {file_name} has NO CAPTION !!!\n"
+                       f"Label changed to PURPLE\n")
 
 
 if __name__ == "__main__":
