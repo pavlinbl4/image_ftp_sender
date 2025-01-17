@@ -1,11 +1,16 @@
+import os
 import sqlite3
 
+base_path = os.path.join(os.path.dirname(__file__), 'sent_files.db')
 
 def initialize_database():
     """
     Создает базу данных и таблицу, если они не существуют.
-    """
-    conn = sqlite3.connect('sent_files.db')
+     """
+
+
+    # conn = sqlite3.connect('sent_files.db')
+    conn = sqlite3.connect(base_path)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS sent_files (
@@ -22,7 +27,8 @@ def log_file_sent(file_name, ftp_name):
     """
     Логирует отправку файла в базу данных.
     """
-    conn = sqlite3.connect('sent_files.db')
+    # conn = sqlite3.connect('sent_files.db')
+    conn = sqlite3.connect(base_path)
     cursor = conn.cursor()
     cursor.execute("INSERT INTO sent_files (filename, ftp_name, sent_date) VALUES (?, ?, datetime('now'))",
                    (file_name, ftp_name))
@@ -62,7 +68,7 @@ def read_data_from_db(db_file, query):
 if __name__ == '__main__':
     initialize_database()
 
-    query = 'SELECT * FROM sent_files;'  # SQL-запрос для получения всех данных
-    data = read_data_from_db('sent_files.db', query)
+    _query = 'SELECT * FROM sent_files;'  # SQL-запрос для получения всех данных
+    data = read_data_from_db(base_path, _query)
     for row in data:
         print(row)  # Выводим каждую строку результата
