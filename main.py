@@ -6,7 +6,7 @@ from loguru import logger
 
 from db_handler import initialize_database, is_file_sent
 from ftp_uploader import upload_file_to_multiple_ftps
-from metadata_handler import get_image_metadata, clear_exif
+from metadata_handler import get_image_metadata, clear_exif, ImageMetadate
 from resize_and_copy_files import compress_image
 
 # Удаляем стандартный обработчик
@@ -34,12 +34,14 @@ def main():
         if file_name.lower().endswith(('jpg', 'jpeg')):
             logger.info(file_name)
             file_path = os.path.join(image_dir, file_name)
-            metadata = get_image_metadata(file_path,
+            image_data = ImageMetadate(file_path)
+            metadata = image_data.read_tags(
                                           tags=['XMP:Description', 'XMP:Label'])
 
             if metadata.get('XMP:Label') == 'Green' and metadata.get('XMP:Description'):
                 if not is_file_sent(file_name):
-                    clear_exif(file_path)
+                    image_data.clear_exif()
+                    image_data.write_metadate()
                     upload_file_to_multiple_ftps(file_path, ftp_details)
                     # compress_image(file_path)
             elif not metadata.get('XMP:Description'):
