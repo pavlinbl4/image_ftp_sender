@@ -13,8 +13,9 @@ logger.remove()
     :return: Словарь с тегами и их значениями.
     """
 
+
 def get_image_metadata(file_path,
-                      tags ):
+                       tags):
     logger.info(file_path)
     with exiftool.ExifToolHelper() as et:
         result = {}
@@ -42,7 +43,7 @@ def clear_exif(file_path):
 
 if __name__ == '__main__':
     # file_path = './test_image/20241109PEV_8316.JPG'
-    file_path = '/Users/evgeniy/Desktop/Images_for_FTP_batch/20241122PEV_9723.jpg'
-    clear_exif(file_path)
-    print(get_image_metadata(file_path,
+    _file_path = '/Users/evgeniy/Desktop/Images_for_FTP_batch/20241122PEV_9723.jpg'
+    clear_exif(_file_path)
+    print(get_image_metadata(_file_path,
                              tags=['XMP:Description', 'XMP:Label', 'XMP:Creator']))

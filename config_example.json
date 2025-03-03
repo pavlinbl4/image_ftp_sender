@@ -1,0 +1,13 @@
+{
+  "image_directory": "./test_image",
+  "ftp_details": [
+    {
+      "host": "localhost",
+      "user": "ev",
+      "password": "index",
+      "remote_directory": ""
+    }
+  ],
+  "photographer_name": "John Doe",
+  "log_file": "/path/to/logfile.log"
+}

@@ -57,6 +57,6 @@ if __name__ == '__main__':
     with open('config.json', 'r') as config_file:
         config = json.load(config_file)
 
-    _ftp_details = config['ftp_details']
+    _ftp_details = config['ftp_details'][0]
 
-    upload_file_ftp('./test_image/20241112PB125', _ftp_details)
+    upload_file_ftp('/Volumes/big4photo/Downloads/бегалиева/HQ8A4066.jpg', _ftp_details)

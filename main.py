@@ -6,7 +6,7 @@ from loguru import logger
 
 from db_handler import initialize_database, is_file_sent
 from ftp_uploader import upload_file_to_multiple_ftps
-from metadata_handler import get_image_metadata, clear_exif, metadate_update
+from metadata_handler import get_image_metadata, clear_exif
 from resize_and_copy_files import compress_image
 
 # Удаляем стандартный обработчик
@@ -41,9 +41,9 @@ def main():
                 if not is_file_sent(file_name):
                     clear_exif(file_path)
                     upload_file_to_multiple_ftps(file_path, ftp_details)
-                    compress_image(file_path)
+                    # compress_image(file_path)
             elif not metadata.get('XMP:Description'):
-                metadate_update(file_path)
+                # metadate_update(file_path)
                 print(Fore.RED + f"File {file_name} has NO CAPTION !!!\n"
                                  f"Label changed to PURPLE\n")
 
