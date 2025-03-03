@@ -48,12 +48,15 @@ class ImageMetadate:
                 self.file_path.encode('utf-8')
             )
 
-    def write_metadate(self):
+    def write_metadate(self,label_color):
         creator_name = "Семен Лиходеев"
 
         # Формируем список команд
         commands = [
+            f'-XMP:Label={label_color}'.encode('utf-8'),
             f'-XMP:Creator={creator_name}'.encode('utf-8'),
+            f'-XMP:ImageCreator={creator_name}'.encode('utf-8'),
+            # f'-XMP:ImageCreatorImageCreatorName={creator_name}'.encode('utf-8'),
             f'-XMP:CaptionWriter={creator_name}'.encode('utf-8'),
             f'-XMP:Credit={creator_name}'.encode('utf-8'),
             f'-XMP:Rights={creator_name}'.encode('utf-8'),
@@ -84,18 +87,18 @@ class ImageMetadate:
 
 
 if __name__ == '__main__':
-    # file_path = './test_image/20241109PEV_8316.JPG'
-    _file_path = '/Users/evgeniy/Library/CloudStorage/GoogleDrive-798l7l39743@gmail.com/My Drive/20191101PEV_7633.JPG'
+    _file_path = './test_image/20241112PB125826.jpg'
+    # _file_path = '/Users/evgeniy/Library/CloudStorage/GoogleDrive-798l7l39743@gmail.com/My Drive/20191101PEV_7633.JPG'
 
     image_metadate = ImageMetadate(_file_path)
     # clear_exif(_file_path)
-    print(image_metadate.read_tags(
-        tags=['XMP:Description', 'XMP:Label', 'XMP:Creator']))
+    # print(image_metadate.read_tags(
+    #     tags=['XMP:Description', 'XMP:Label', 'XMP:Creator']))
     # image_metadate.clear_exif()
-    # image_metadate.write_metadate()
-    # xmp = image_metadate.extract_xmp()[0]
-    # for k, v in xmp.items():
-    #     print(k, v)
+    image_metadate.write_metadate("Label Purple")
+    xmp = image_metadate.extract_xmp()[0]
+    for k, v in xmp.items():
+        print(k, v)
     # print(type(xmp))
     # xmp = image_metadate.extract_iptc()[0]
     # for k, v in xmp.items():
