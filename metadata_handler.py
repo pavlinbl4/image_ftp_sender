@@ -18,10 +18,10 @@ class ImageMetadate:
     def __init__(self, file_path):
         self.file_path = file_path
 
-    @property
+
     def extract_all_metadate(self):
         with exiftool.ExifToolHelper() as et:
-            metadate = et.get_metadata(self.file_path)[0]
+            metadate = et.get_metadata(self.file_path)
         return metadate
 
     def extract_iptc(self):
@@ -87,7 +87,7 @@ class ImageMetadate:
 
 
 if __name__ == '__main__':
-    _file_path = './test_image/20241112PB125826.jpg'
+    _file_path = '/Users/evgeniy/Pictures/2025/03_March/20250307_test/20250307EPAV7850.ORF'
     # _file_path = '/Users/evgeniy/Library/CloudStorage/GoogleDrive-798l7l39743@gmail.com/My Drive/20191101PEV_7633.JPG'
 
     image_metadate = ImageMetadate(_file_path)
@@ -95,10 +95,13 @@ if __name__ == '__main__':
     # print(image_metadate.read_tags(
     #     tags=['XMP:Description', 'XMP:Label', 'XMP:Creator']))
     # image_metadate.clear_exif()
-    image_metadate.write_metadate("Label Purple")
-    xmp = image_metadate.extract_xmp()[0]
-    for k, v in xmp.items():
+    # image_metadate.write_metadate("Label Purple")
+    all_metadata = image_metadate.extract_all_metadate()[0]
+    for k, v in all_metadata.items():
         print(k, v)
+
+    # for k, v in xmp.items():
+    #     print(k, v)
     # print(type(xmp))
     # xmp = image_metadate.extract_iptc()[0]
     # for k, v in xmp.items():

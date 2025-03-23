@@ -2,8 +2,11 @@ import os
 from ftplib import FTP
 import json
 from tqdm import tqdm
-
+from loguru import logger
 from db_handler import log_file_sent
+script_dir = os.path.dirname(os.path.abspath(__file__))
+log_file_path = os.path.join(script_dir, "ftp_upload_log.log")
+logger.add(log_file_path, format="{time} {level} {message}", level="INFO", retention="1 day", rotation="1 day")
 
 
 def upload_file_ftp(file_path, ftp_details):
@@ -41,7 +44,7 @@ def upload_file_ftp(file_path, ftp_details):
 
     ftp.quit()
     # log_file_sent(os.path.basename(file_path), ftp_details['host'])
-    print(f"Файл {file_path} успешно загружен на сервер {ftp_details['host']}.")
+    logger.info(f"Файл {file_path} успешно загружен на сервер {ftp_details['host']}.")
 
 
 def upload_file_to_multiple_ftps(file_path, ftp_details_list):

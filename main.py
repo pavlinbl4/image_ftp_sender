@@ -11,6 +11,9 @@ from resize_and_copy_files import compress_image
 
 # Удаляем стандартный обработчик
 logger.remove()
+script_dir = os.path.dirname(os.path.abspath(__file__))
+log_file_path = os.path.join(script_dir, "ftp_upload_log.log")
+logger.add(log_file_path, format="{time} {level} {message}", level="INFO", retention="1 day", rotation="1 day")
 
 init(autoreset=True)  # Автоматически сбрасывает стиль после каждого print
 
@@ -29,7 +32,7 @@ def main():
     ftp_details = config['ftp_details']
 
     for file_name in os.listdir(image_dir):
-        print(f'check file {file_name}')
+        logger.info(f'check file {file_name}')
 
         if file_name.lower().endswith(('jpg', 'jpeg')):
             logger.info(file_name)
