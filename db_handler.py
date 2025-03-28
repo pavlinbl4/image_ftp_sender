@@ -1,13 +1,15 @@
 import os
 import sqlite3
+from loguru import logger
 
 base_path = os.path.join(os.path.dirname(__file__), 'sent_files.db')
+logger.info(f'{base_path = }')
+
 
 def initialize_database():
     """
     Создает базу данных и таблицу, если они не существуют.
      """
-
 
     # conn = sqlite3.connect('sent_files.db')
     conn = sqlite3.connect(base_path)
@@ -40,7 +42,7 @@ def is_file_sent(file_name):
     """
     Проверяет, отправлялся ли файл ранее.
     """
-    conn = sqlite3.connect('sent_files.db')
+    conn = sqlite3.connect(base_path)
     cursor = conn.cursor()
     cursor.execute("SELECT 1 FROM sent_files WHERE filename = ?", (file_name,))
     result = cursor.fetchone()
@@ -48,9 +50,9 @@ def is_file_sent(file_name):
     return result is not None
 
 
-def read_data_from_db(db_file, query):
+def read_data_from_db(base_path, query):
     # Подключение к базе данных SQLite
-    conn = sqlite3.connect(db_file)
+    conn = sqlite3.connect(base_path)
     cursor = conn.cursor()
 
     # Выполнение SQL-запроса
