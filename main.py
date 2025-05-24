@@ -48,7 +48,7 @@ def main():
                     upload_file_to_multiple_ftps(file_path, ftp_details)
                     # временно отключаю копирование снимков в новый проспект
                     process_image_with_xmp(file_path)
-            elif not metadata.get('XMP:Description'):
+            elif not metadata.get('XMP:Description') and metadata.get('XMP:Label') != "Purple":
                 image_data.write_metadate("Purple")
                 print(Fore.RED + f"File {file_name} has NO CAPTION !!!\n"
                                  f"Label changed to PURPLE\n")
