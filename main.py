@@ -4,6 +4,7 @@ import os
 from colorama import init, Fore
 from loguru import logger
 
+from core.config_loader import ConfigLoader
 from db_handler import initialize_database, is_file_sent
 from ftp_uploader import upload_file_to_multiple_ftps
 from metadata_handler import ImageMetadate
@@ -21,11 +22,13 @@ init(autoreset=True)  # Автоматически сбрасывает стил
 def main():
     initialize_database()  # Убедиться, что база данных существует
 
-    config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+    # config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+    site = 'photoupload'
+    config = ConfigLoader.load(site)
 
     # Далее идет основной процесс обработки и отправки файлов
-    with open(config_path) as f:
-        config = json.load(f)
+    # with open(config_path) as f:
+    #     config = json.load(f)
 
     image_dir = config["image_directory"]
     logger.info(f'{image_dir = }')

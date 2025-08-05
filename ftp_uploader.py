@@ -3,6 +3,8 @@ from ftplib import FTP
 import json
 from tqdm import tqdm
 from loguru import logger
+
+from core.config_loader import ConfigLoader
 from db_handler import log_file_sent
 import socket
 
@@ -61,9 +63,13 @@ def upload_file_to_multiple_ftps(file_path, ftp_details_list):
 
 if __name__ == '__main__':
     # Загрузка конфигурации из файла
-    with open('config.json', 'r') as config_file:
-        config = json.load(config_file)
 
-    _ftp_details = config['ftp_details'][0]
 
-    upload_file_ftp('/Volumes/big4photo/Downloads/бегалиева/HQ8A4066.jpg', _ftp_details)
+    site = 'photoupload'
+    config = ConfigLoader.load(site)
+    # logger.info(f'config: {config}')
+
+
+    logger.info(f'ftp_details_yaml: {config['ftp_details'][0]}')
+
+    # upload_file_ftp('/Volumes/big4photo/Downloads/бегалиева/HQ8A4066.jpg', _ftp_details)
